@@ -18,7 +18,6 @@ public class NewAppointment {
 
     private LocalDateTime createdAt;
 
-
     public NewAppointment(String clientName, String phone, Specialist specialist, LocalDateTime startAt, LocalDateTime endAt, Status status, LocalDateTime createdAt) {
         this.clientName = clientName;
         this.phone = phone;
