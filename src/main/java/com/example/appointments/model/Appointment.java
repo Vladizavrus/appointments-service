@@ -31,14 +31,12 @@ public class Appointment {
         this.createdAt = createdAt;
     }
 
-    public Appointment(String clientName, String phone, Specialist specialist, LocalDateTime startAt, LocalDateTime endAt, LocalDateTime createdAt) {
-        this.clientName = clientName;
-        this.phone = phone;
-        this.specialist = specialist;
-        this.startAt = startAt;
-        this.endAt = endAt;
-        this.status = Status.SCHEDULED;
-        this.createdAt = createdAt;
+    public Appointment(long id, NewAppointment appRequest) {
+        this( id, appRequest.getClientName(),
+            appRequest.getPhone(), appRequest.getSpecialist(),
+            appRequest.getStartAt(), appRequest.getEndAt(),
+            appRequest.getStatus(), appRequest.getCreatedAt()
+        );
     }
 
     public String getClientName() {
