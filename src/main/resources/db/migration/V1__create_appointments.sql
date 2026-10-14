@@ -1,5 +1,5 @@
 
-CREATE TABLE IF NOT EXISTS appointments(
+CREATE TABLE appointments(
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     client_name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
