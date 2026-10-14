@@ -1,0 +1,14 @@
+
+CREATE TABLE IF NOT EXISTS appointments(
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    client_name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    specialist VARCHAR CHECK (specialist in (
+        'THERAPIST','CARDIOLOGIST', 'DENTIST')) NOT NULL,
+    start_at TIMESTAMP NOT NULL,
+    end_at TIMESTAMP NOT NULL,
+    status VARCHAR DEFAULT 'SCHEDULED' CHECK (status in
+        ('SCHEDULED', 'COMPLETED', 'CANCELLED')) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CHECK (end_at > start_at)
+);
