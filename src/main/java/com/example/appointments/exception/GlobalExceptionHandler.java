@@ -1,6 +1,7 @@
 package com.example.appointments.exception;
 
 import com.example.appointments.dto.ExceptionDTO;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -54,5 +55,10 @@ public class GlobalExceptionHandler {
         return new ExceptionDTO(400, "некорректный параметр "+e.getName());
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ExceptionDTO handleDataIntegrityViolation(DataIntegrityViolationException e) {
+        return new ExceptionDTO(409, "время уже занято");
+    }
 
 }

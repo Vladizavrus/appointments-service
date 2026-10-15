@@ -49,8 +49,8 @@ public class AppointmentRepository {
                 rowMapper, specialistFilter, specialistFilter, statusFilter, statusFilter, date, date);
     }
 
-    public void update(Appointment appointment) {
-        jdbcTemplate.update("update appointments set client_name = ?, phone = ?, specialist = ?, start_at = ?, end_at = ?, status = ? where id = ?",
+    public int update(Appointment appointment) {
+        return jdbcTemplate.update("update appointments set client_name = ?, phone = ?, specialist = ?, start_at = ?, end_at = ?, status = ? where id = ? and status = 'SCHEDULED'",
                 appointment.getClientName(), appointment.getPhone(),
                 appointment.getSpecialist().name(), appointment.getStartAt(),
                 appointment.getEndAt(), appointment.getStatus().name(), appointment.getId());

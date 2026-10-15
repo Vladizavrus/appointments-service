@@ -138,6 +138,7 @@ class AppointmentServiceTest {
                 "Пётр", null, Specialist.CARDIOLOGIST, firstDate, secondDate);
         when(repository.findById(goodAppointment.getId())).thenReturn(Optional.of(goodAppointment));
         when(repository.isIntersect(Specialist.CARDIOLOGIST, goodAppointment.getId(), firstDate, secondDate)).thenReturn(false);
+        when(repository.update(any())).thenReturn(1);
 
         AppointmentResponse result = service.update(goodAppointment.getId(), newRequest);
 
@@ -198,6 +199,7 @@ class AppointmentServiceTest {
     @Test
     void completeScheduledAppointment() {
         when(repository.findById(goodAppointment.getId())).thenReturn(Optional.of(goodAppointment));
+        when(repository.update(any())).thenReturn(1);
 
         AppointmentResponse result = service.complete(goodAppointment.getId());
 
@@ -208,6 +210,7 @@ class AppointmentServiceTest {
     @Test
     void cancelScheduledAppointment() {
         when(repository.findById(goodAppointment.getId())).thenReturn(Optional.of(goodAppointment));
+        when(repository.update(any())).thenReturn(1);
 
         AppointmentResponse result = service.cancel(goodAppointment.getId());
 
@@ -229,5 +232,22 @@ class AppointmentServiceTest {
 
         assertThrows(NotFoundException.class, () -> service.cancel(42L));
         verify(repository, never()).update(any());
+    }
+
+    @Test
+    void cancelWhenChangedConcurrently() {
+        when(repository.findById(goodAppointment.getId())).thenReturn(Optional.of(goodAppointment));
+        when(repository.update(any())).thenReturn(0);
+
+        assertThrows(ConflictException.class, () -> service.cancel(goodAppointment.getId()));
+    }
+
+    @Test
+    void updateWhenChangedConcurrently() {
+        when(repository.findById(goodAppointment.getId())).thenReturn(Optional.of(goodAppointment));
+        when(repository.isIntersect(Specialist.CARDIOLOGIST, goodAppointment.getId(), firstDate, secondDate)).thenReturn(false);
+        when(repository.update(any())).thenReturn(0);
+
+        assertThrows(ConflictException.class, () -> service.update(goodAppointment.getId(), goodRequest));
     }
 }

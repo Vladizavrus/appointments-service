@@ -66,7 +66,7 @@ public class AppointmentService {
         appointment.setPhone(request.getPhone());
         appointment.setSpecialist(request.getSpecialist());
 
-        repository.update(appointment);
+        if (repository.update(appointment) == 0) throw new ConflictException("Запись уже изменена другим запросом");
 
         return appointmentToResponse(appointment);
     }
@@ -84,7 +84,8 @@ public class AppointmentService {
         if (appointment.getStatus() != Status.SCHEDULED) throw new ConflictException("Запись уже была завершена или отменена");
         appointment.setStatus(status);
 
-        repository.update(appointment);
+        if (repository.update(appointment) == 0) throw new ConflictException("Запись уже изменена другим запросом");
+
         return appointmentToResponse(appointment);
     }
 
